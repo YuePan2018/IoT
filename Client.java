@@ -19,7 +19,8 @@ public class Client {
                 /* keyboard input choice */
                 Scanner scan = new Scanner(System.in);
                 String input;
-                System.out.println("Input Your Choice: paper, rock or scissor");
+                System.out.println("(Input Your Choice: paper, rock or scissor)");
+                System.out.print(">Choice: ");
                 if (scan.hasNextLine()) {
                     input = scan.nextLine();
                 }else{
@@ -30,23 +31,23 @@ public class Client {
                 outWriter.println(input);
                 outWriter.flush();
                 /* receive result from server*/
-                System.out.println("Result: " + in_buf.readLine());
+                System.out.println(">Result: " + in_buf.readLine());
                 /* end game or start next round*/
                 System.out.println("Ready for Next Round?");
-                System.out.println("press any key to continue or input \"end\" to end this game");
+                System.out.println("(press any key to continue or input \"end\" to end this game)");
                 if (scan.hasNextLine()){
                     outWriter.println(scan.nextLine());
                     outWriter.flush();
                     if (in_buf.readLine().equals("end")){
                         break;
                     }else {
-                        System.out.println("Next Round");
+                        System.out.println("***Next Round");
                     }
                 }
             }
             in_buf.close();
             outWriter.close();
-            System.out.println("End Game");
+            System.out.println("***Game End");
         } catch (Exception x) {
             x.printStackTrace();
         }

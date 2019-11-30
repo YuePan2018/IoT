@@ -46,11 +46,11 @@ public class Server {
                         ret1 = "Draw";
                         ret2 = "Draw";
                     }else if((choice1.equals("rock")&&choice2.equals("paper")) || (choice1.equals("paper")&&choice2.equals("scissor")) || (choice1.equals("scissor")&&choice2.equals("rock"))){
-                        System.out.println("winner: choice2");
+                        System.out.println(">winner: player2");
                         ret1 = "You Loss";
                         ret2 = "You Win";
                     }else{
-                        System.out.println("winner: choice1");
+                        System.out.println(">winner: player1");
                         ret1 = "You Win";
                         ret2 = "You Loss";
                     }
