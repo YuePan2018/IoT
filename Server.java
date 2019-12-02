@@ -4,16 +4,17 @@ import java.io.*;
 public class Server {
     public static void main(String [] args){
         /* args[] check*/
-        if (args.length != 1) {
-            System.out.println("Usage: java Server <ServerPort>");
+        if (args.length != 0) {
+            System.out.println("Usage: java Server");
             System.exit(-1);
         }
-        int port = Integer.valueOf(args[0]);
         try {
             /* server listening TCP */
-            ServerSocket serverSocket = new ServerSocket(port);
+            ServerSocket serverSocket = new ServerSocket(9090);
             System.out.println("***Server start");
-            System.out.println("IP: "+ InetAddress.getLocalHost().getHostAddress() + ", Port: " + port);
+            System.out.println("IP: "+ InetAddress.getLocalHost().getHostAddress() + ", Port: 9090");
+            
+            while(true){
             /* TCP connection */
             Socket socket1 = serverSocket.accept();
             Socket socket2 = serverSocket.accept();
@@ -21,12 +22,15 @@ public class Server {
             BufferedReader buffer2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
             PrintWriter Writer1 = new PrintWriter(socket1.getOutputStream());
             PrintWriter Writer2 = new PrintWriter(socket2.getOutputStream());
-            /* game rounds loop */
-            System.out.println("***Two player connected");
-            while(true){
+            /* round start */
                 System.out.println("**Round Start");
                 String ret1;    //return value to client 1
                 String ret2;    // return value to client 2
+                /* send countdown request to clients */
+                Writer1.println("countdown");
+                Writer1.flush();
+                Writer2.println("countdown");
+                Writer2.flush();
                 /* read choice from client*/
                 String choice1 = buffer1.readLine();
                 String choice2 = buffer2.readLine();
@@ -47,12 +51,12 @@ public class Server {
                         ret2 = "Draw";
                     }else if((choice1.equals("rock")&&choice2.equals("paper")) || (choice1.equals("paper")&&choice2.equals("scissor")) || (choice1.equals("scissor")&&choice2.equals("rock"))){
                         System.out.println(">winner: player2");
-                        ret1 = "You Loss";
+                        ret1 = "You Lose";
                         ret2 = "You Win";
                     }else{
                         System.out.println(">winner: player1");
                         ret1 = "You Win";
-                        ret2 = "You Loss";
+                        ret2 = "You Lose";
                     }
                 }
                 /* write results to clients*/
@@ -60,29 +64,13 @@ public class Server {
                 Writer1.flush();
                 Writer2.println(ret2);
                 Writer2.flush();
-                /* read end request from clients */
-                String end1 = buffer1.readLine();
-                String end2 = buffer2.readLine();
-                if(end1.equals("end") || end2.equals("end")){
-                    Writer1.println("end");
-                    Writer1.flush();
-                    Writer2.println("end");
-                    Writer2.flush();
-                    break;
-                }else {
-                    Writer1.println("continue");
-                    Writer1.flush();
-                    Writer2.println("continue");
-                    Writer2.flush();
-                }
-            }
-            System.out.println("***Game Over");
             Writer1.close();
             buffer1.close();
             Writer2.close();
             buffer2.close();
+    		}
         } catch (Exception x) {
-        x.printStackTrace();
+        	x.printStackTrace();
         }
     }
 }
